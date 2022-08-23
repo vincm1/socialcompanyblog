@@ -2,11 +2,10 @@ from email import message
 from wsgiref.validate import validator
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import ValidationError
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_wtf.file import FileField, FileAllowed
-
 from flask_login import current_user
-from socialcompanyblog import User 
+from socialcompanyblog.models import User 
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(),Email()])
@@ -16,7 +15,7 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(),Email()])
     username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('pass_confirm'), message="Passwords must match"])
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('pass_confirm', message="Passwords must match")])
     pass_confirm = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Register')
 
@@ -30,7 +29,7 @@ class RegistrationForm(FlaskForm):
 
 class UpdateUserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    username = StringField('Username', validators[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     picture = FileField('Update profile picture', validators=[FileAllowed('jpg', 'png')])
     submit = SubmitField('Update profile')
 
